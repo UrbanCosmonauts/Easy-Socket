@@ -6,24 +6,23 @@
   </head>
   <body>
 
-    <textarea id="myTextArea"></textarea>
+    <textarea id="collab"></textarea>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="/socket.io/socket.io.js"></script> 
-    <!-- This is served by the server. DO NOT REMOVE THIS DEPENDENCY --- SOCKET.IO -->
-    <script src="/javascripts/easySocket.js"></script>
         <script>
           
+          var socket = io("http://localhost:8000");
 
-          // var socket = io.connect('http://localhost:8080');
-          // socket.on('news', function (data) {
-          //   console.log(data);
-          //   socket.emit('my other event', { my: 'data' });
-          // });
-
-          var socket = easyio.connect("http://localhost:8080");
-
-          socket.listenTo('news', function(data){
+          socket.on('news', function(data){
             console.log(data);
+          })
+
+          $('#collab').on('input', function(){
+            socket.emit('textChange', $(this).val());
+          })
+
+          socket.on('textUpdate', function(data){
+            $('#collab').val(data);
           })
 
         </script>
